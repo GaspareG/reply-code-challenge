@@ -1,6 +1,6 @@
 # Reply Code Challenge 2018
 
-Solution for training problem of (Reply Code Challenge)[https://challenges.reply.com]
+Solution for training problem of [Reply Code Challenge](https://challenges.reply.com)
 
 ## Point
 - Input 1: **227**
