@@ -6,14 +6,15 @@ using namespace std;
 typedef tuple<int, int> point;
 typedef tuple<point, point> line;
 typedef tuple<point, point, point> triangle;
+typedef int_fast32_t fint;
 
-int nextInt() {
-  int x;
-  scanf("%d", &x);
+fint nextInt() {
+  fint x;
+  assert(1 == scanf("%ld", &x));
   return x;
 }
 
-int N;
+fint N;
 point s, e;
 
 vector<triangle> obst;
@@ -21,14 +22,14 @@ vector<line> L;
 vector<point> P;
 map< point, vector<point> > G;
 
-inline int minX(point a, point b) { return min(get<0>(a), get<0>(b)); }
-inline int minY(point a, point b) { return min(get<1>(a), get<1>(b)); }
-inline int maxX(point a, point b) { return max(get<0>(a), get<0>(b)); }
-inline int maxY(point a, point b) { return max(get<1>(a), get<1>(b)); }
-inline int minX(line l){ return minX(get<0>(l), get<1>(l)); }
-inline int minY(line l){ return minY(get<0>(l), get<1>(l)); }
-inline int maxX(line l){ return maxX(get<0>(l), get<1>(l)); }
-inline int maxY(line l){ return maxY(get<0>(l), get<1>(l)); }
+inline fint minX(point a, point b) { return min(get<0>(a), get<0>(b)); }
+inline fint minY(point a, point b) { return min(get<1>(a), get<1>(b)); }
+inline fint maxX(point a, point b) { return max(get<0>(a), get<0>(b)); }
+inline fint maxY(point a, point b) { return max(get<1>(a), get<1>(b)); }
+inline fint minX(line l){ return minX(get<0>(l), get<1>(l)); }
+inline fint minY(line l){ return minY(get<0>(l), get<1>(l)); }
+inline fint maxX(line l){ return maxX(get<0>(l), get<1>(l)); }
+inline fint maxY(line l){ return maxY(get<0>(l), get<1>(l)); }
 
 double distance(point a, point b) {
   return sqrt(pow(1. * (get<0>(a) - get<0>(b)), 2) +
@@ -42,7 +43,7 @@ bool onSegment(point p, point q, point r) {
   return false;
 }
 
-int orientation(point p, point q, point r) {
+fint orientation(point p, point q, point r) {
   int val = (get<1>(q) - get<1>(p)) * (get<0>(r) - get<0>(q)) -
             (get<0>(q) - get<0>(p)) * (get<1>(r) - get<1>(q));
   if (val == 0) return 0;
@@ -50,10 +51,10 @@ int orientation(point p, point q, point r) {
 }
 
 bool intersect(point p1, point q1, point p2, point q2) {
-  int o1 = orientation(p1, q1, p2);
-  int o2 = orientation(p1, q1, q2);
-  int o3 = orientation(p2, q2, p1);
-  int o4 = orientation(p2, q2, q1);
+  fint o1 = orientation(p1, q1, p2);
+  fint o2 = orientation(p1, q1, q2);
+  fint o3 = orientation(p2, q2, p1);
+  fint o4 = orientation(p2, q2, q1);
   if (o1 != o2 && o3 != o4) return true;
   if (o1 == 0 && onSegment(p1, p2, q1)) return true;
   if (o2 == 0 && onSegment(p1, q2, q1)) return true;
@@ -79,10 +80,11 @@ bool PointInTriangle (point pt, point v1, point v2, point v3)
 #define BUCKET 100
 
 int main() {
-  int a0 = nextInt();
-  int a1 = nextInt();
-  int a2 = nextInt();
-  int a3 = nextInt();
+
+  fint a0 = nextInt();
+  fint a1 = nextInt();
+  fint a2 = nextInt();
+  fint a3 = nextInt();
 
   s = make_tuple(a0, a1);
   e = make_tuple(a2, a3);
@@ -91,12 +93,12 @@ int main() {
   obst.reserve(N);
 
   for (int i = 0; i < N; i++) {
-    int x1 = nextInt();
-    int x2 = nextInt();
-    int x3 = nextInt();
-    int x4 = nextInt();
-    int x5 = nextInt();
-    int x6 = nextInt();
+    fint x1 = nextInt();
+    fint x2 = nextInt();
+    fint x3 = nextInt();
+    fint x4 = nextInt();
+    fint x5 = nextInt();
+    fint x6 = nextInt();
 
     obst.push_back(
         make_tuple(make_tuple(x1, x2), make_tuple(x3, x4), make_tuple(x5, x6)));
@@ -122,7 +124,7 @@ int main() {
     auto l02 = get<0>(p0) < get<0>(p2) ? make_tuple(p0, p2) : make_tuple(p2, p0);
     auto l12 = get<0>(p1) < get<0>(p2) ? make_tuple(p1, p2) : make_tuple(p2, p1);
 
-    int x0, x1;
+    fint x0, x1;
     x0 = (minX(l01)+OFFSET)/BUCKET;
     x1 = (maxX(l01)+OFFSET)/BUCKET;
     for(; x0 <= x1; ++x0)
@@ -206,10 +208,10 @@ int main() {
     
   }
 
-  printf("P prima %d\n", P.size());
+  // printf("P prima %zu\n", P.size());
   vector<point> tmp;
   #pragma omp parallel for schedule(guided)
-  for(int i=0; i<P.size(); ++i)
+  for(size_t i=0; i<P.size(); ++i)
   {
     auto p = P[i];
     bool out = true;
@@ -227,16 +229,16 @@ int main() {
     }
   }
   P = tmp;
-  printf("P dopo %d\n", P.size());
-  printf("L dopo %d\n", L.size());
-  fflush(stdout);
+  // printf("P dopo %zu\n", P.size());
+  // printf("L dopo %zu\n", L.size());
+  // fflush(stdout);
 
   auto linecp = [](line a, line b){ return get<0>(get<0>(a)) < get<0>(get<0>(b)); };
 
   sort(P.begin(), P.end());
   sort(L.begin(), L.end(), linecp);
-  printf("SORT\n"); 
-  fflush(stdout);
+  // printf("SORT\n"); 
+  // fflush(stdout);
 
 /*
   #pragma omp parallel for schedule(guided)
@@ -278,7 +280,7 @@ int main() {
   best[s] = 0.;
   best[e] = INT_MAX;
 
-  int count = 0;
+  fint count = 0;
   while (!Q.empty()) {
     auto top = Q.top();
     Q.pop();
@@ -287,13 +289,13 @@ int main() {
     if (S.find(top.second) == S.end()) continue;
     S.erase(top.second);
 
-    printf("[%d][%d][%.6f][%d]\n", get<0>(top.second), get<1>(top.second), top.first, count++);
-    fflush(stdout);
+    // printf("[%d][%d][%.6f][%ld]\n", get<0>(top.second), get<1>(top.second), top.first, count++);
+    // fflush(stdout);
 
     if (top.second == e) break;  // END
 
     #pragma omp parallel for schedule(guided)
-    for (int i = 0; i < P.size(); ++i) {
+    for (size_t i = 0; i < P.size(); ++i) {
 
       auto p = P[i];
 
@@ -306,10 +308,10 @@ int main() {
       if( get<0>(top.second) > get<0>(p) )
         pp = make_tuple(p, top.second);
 
-      int x0 = (minX(pp)+OFFSET)/BUCKET;
-      int x1 = (maxX(pp)+OFFSET)/BUCKET;
+      fint x0 = (minX(pp)+OFFSET)/BUCKET;
+      fint x1 = (maxX(pp)+OFFSET)/BUCKET;
 
-      for(x0; x0 <= x1; x0++) 
+      for(; x0 <= x1; x0++) 
       {
         for(auto l : bucketLine[x0])
           if( intersect(top.second, p, get<0>(l), get<1>(l)) )
@@ -323,10 +325,10 @@ int main() {
 
       double dist = best[top.second] + distance(top.second, p);
       if (best.find(p) == best.end() || dist < best[p]) {
+        best[p] = dist;
+        prec[p] = top.second;
         #pragma omp critical
         {
-          best[p] = dist;
-          prec[p] = top.second;
           Q.push(make_pair(-dist, p));
         }
       }
@@ -345,7 +347,7 @@ int main() {
     output.push_back(s);
     reverse(output.begin(), output.end());
 
-    printf("%d\n", output.size());
+    printf("%zu\n", output.size());
     for (auto o : output) {
       printf("%d %d\n", get<0>(o), get<1>(o));
     }
