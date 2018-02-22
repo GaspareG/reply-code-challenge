@@ -25,10 +25,6 @@ inline int minX(point a, point b) { return min(get<0>(a), get<0>(b)); }
 inline int minY(point a, point b) { return min(get<1>(a), get<1>(b)); }
 inline int maxX(point a, point b) { return max(get<0>(a), get<0>(b)); }
 inline int maxY(point a, point b) { return max(get<1>(a), get<1>(b)); }
-inline int minX(line l){ return minX(get<0>(l), get<1>(l)); }
-inline int minY(line l){ return minY(get<0>(l), get<1>(l)); }
-inline int maxX(line l){ return maxX(get<0>(l), get<1>(l)); }
-inline int maxY(line l){ return maxY(get<0>(l), get<1>(l)); }
 
 double distance(point a, point b) {
   return sqrt(pow(1. * (get<0>(a) - get<0>(b)), 2) +
@@ -75,9 +71,6 @@ bool PointInTriangle (point pt, point v1, point v2, point v3)
     return ((b1 == b2) && (b2 == b3));
 }
 
-#define OFFSET 1000000
-#define BUCKET 100
-
 int main() {
   int a0 = nextInt();
   int a1 = nextInt();
@@ -108,8 +101,6 @@ int main() {
   P.push_back(s);
   P.push_back(e);
 
-  vector<line> bucketLine[2*OFFSET/BUCKET+1];
-
   for (auto o : obst) {
     auto p0 = get<0>(o);
     auto p1 = get<1>(o);
@@ -121,22 +112,6 @@ int main() {
     auto l01 = get<0>(p0) < get<0>(p1) ? make_tuple(p0, p1) : make_tuple(p1, p0);
     auto l02 = get<0>(p0) < get<0>(p2) ? make_tuple(p0, p2) : make_tuple(p2, p0);
     auto l12 = get<0>(p1) < get<0>(p2) ? make_tuple(p1, p2) : make_tuple(p2, p1);
-
-    int b0, b1;
-    b0 = (minX(l01)+OFFSET)/BUCKET;
-    b1 = (maxX(l01)+OFFSET)/BUCKET;
-    for(; b0 <= b1; ++b0)
-      bucketLine[b0].push_back(l01);
-
-    b0 = (minX(l02)+OFFSET)/BUCKET;
-    b1 = (maxX(l02)+OFFSET)/BUCKET;
-    for(; b0 <= b1; ++b0)
-      bucketLine[b0].push_back(l02);
-
-    b0 = (minX(l12)+OFFSET)/BUCKET;
-    b1 = (maxX(l12)+OFFSET)/BUCKET;
-    for(; b0 <= b1; ++b0)
-      bucketLine[b0].push_back(l12);
 
     auto p00 = make_tuple(get<0>(p0) + 1, get<1>(p0));
     auto p01 = make_tuple(get<0>(p0), get<1>(p0) + 1);
@@ -172,8 +147,8 @@ int main() {
     if( !PointInTriangle(p22, p0, p1, p2) ) P.push_back(p22);
     if( !PointInTriangle(p23, p0, p1, p2) ) P.push_back(p23);
 
-    
-    /*auto dp00 = make_tuple(get<0>(p0) + 1, get<1>(p0) + 1);
+    /*
+    auto dp00 = make_tuple(get<0>(p0) + 1, get<1>(p0) + 1);
     auto dp01 = make_tuple(get<0>(p0) + 1, get<1>(p0) - 1);
     auto dp02 = make_tuple(get<0>(p0) - 1, get<1>(p0) + 1);
     auto dp03 = make_tuple(get<0>(p0) - 1, get<1>(p0) - 1);
@@ -188,21 +163,21 @@ int main() {
     auto dp22 = make_tuple(get<0>(p2) - 1, get<1>(p2) + 1);
     auto dp23 = make_tuple(get<0>(p2) - 1, get<1>(p2) - 1);
 
-    if( !PointInTriangle(dp00, p0, p1, p2) ) P.push_back(dp00);
-    if( !PointInTriangle(dp01, p0, p1, p2) ) P.push_back(dp01);
-    if( !PointInTriangle(dp02, p0, p1, p2) ) P.push_back(dp02);
-    if( !PointInTriangle(dp03, p0, p1, p2) ) P.push_back(dp03);
+    P.push_back(dp00);
+    P.push_back(dp01);
+    P.push_back(dp02);
+    P.push_back(dp03);
 
-    if( !PointInTriangle(dp10, p0, p1, p2) ) P.push_back(dp10);
-    if( !PointInTriangle(dp11, p0, p1, p2) ) P.push_back(dp11);
-    if( !PointInTriangle(dp12, p0, p1, p2) ) P.push_back(dp12);
-    if( !PointInTriangle(dp13, p0, p1, p2) ) P.push_back(dp13);
+    P.push_back(dp10);
+    P.push_back(dp11);
+    P.push_back(dp12);
+    P.push_back(dp13);
 
-    if( !PointInTriangle(dp20, p0, p1, p2) ) P.push_back(dp20);
-    if( !PointInTriangle(dp21, p0, p1, p2) ) P.push_back(dp21);
-    if( !PointInTriangle(dp22, p0, p1, p2) ) P.push_back(dp22);
-    if( !PointInTriangle(dp23, p0, p1, p2) ) P.push_back(dp23);*/
-    
+    P.push_back(dp20);
+    P.push_back(dp21);
+    P.push_back(dp22);
+    P.push_back(dp23);
+    */
   }
 
   printf("P prima %d\n", P.size());
@@ -268,6 +243,13 @@ int main() {
   fflush(stdout);
 */
 
+//   return 0;
+
+//  for( auto l : L )
+//  {
+//    printf("[%d][%d] - [%d][%d]\n", get<0>(get<0>(l)),get<1>(get<0>(l)),get<0>(get<1>(l)),get<1>(get<1>(l))); 
+//  }
+
   set<point> S(P.begin(), P.end());
   map<point, double> best;
   map<point, point> prec;
@@ -288,7 +270,8 @@ int main() {
 
     printf("[%d][%d][%.6f][%d]\n", get<0>(top.second), get<1>(top.second), top.first, count++);
     fflush(stdout);
-
+    // printf("[%d, %d] [%.6f]\n", get<0>(top.second), get<1>(top.second),
+    // best[top.second]);
     if (top.second == e) break;  // END
 
     #pragma omp parallel for schedule(guided)
@@ -305,18 +288,37 @@ int main() {
       if( get<0>(top.second) > get<0>(p) )
         pp = make_tuple(p, top.second);
 
-      int b0 = (minX(pp)+OFFSET)/BUCKET;
-      int b1 = (maxX(pp)+OFFSET)/BUCKET;
+      auto begin = lower_bound(L.begin(), L.end(), pp, linecp);
+      auto end = L.end(); // upper_bound(L.begin(), L.end(), pp, linecp)+1;
 
-      for(b0; b0 <= b1; b0++) {
-        for(auto l : bucketLine[b0])
-          if( intersect(top.second, p, get<0>(l), get<1>(l)) )
-          {
-            inter = true;
-            break;
-          }
-        if(inter) break;
+      for(begin; begin != end; begin++)
+      {
+        auto l = *begin;
+//        if( get<0>(get<1>(l)) > get<0>(get<0>(pp)) ) continue;
+        if( get<0>(get<0>(l)) > get<0>(get<1>(pp)) ) break;
+        if( intersect(top.second, p, get<0>(l), get<1>(l)) )
+        {
+          inter = true;
+          break;
+        }
       }
+
+      if( inter ) continue;
+
+      begin = lower_bound(L.begin(), L.end(), pp, linecp);
+      end = L.begin(); // upper_bound(L.begin(), L.end(), pp, linecp)+1;
+
+      for(begin; begin != end; begin--)
+      {
+        auto l = *begin;
+//        if( get<0>(get<1>(l)) > get<0>(get<0>(pp)) ) continue;
+        if( intersect(top.second, p, get<0>(l), get<1>(l)) )
+        {
+          inter = true;
+          break;
+        }
+      }
+
       if( inter ) continue;
 
       double dist = best[top.second] + distance(top.second, p);
@@ -329,6 +331,27 @@ int main() {
         }
       }
     }
+    
+
+    /*
+    #pragma omp parallel for schedule(guided)
+    for (int i = 0; i < G[top.second].size(); ++i) {
+
+      auto p = G[top.second][i];
+
+      if (S.find(p) == S.end()) continue;
+
+      double dist = best[top.second] + distance(top.second, p);
+      if (best.find(p) == best.end() || dist < best[p]) {
+        #pragma omp critical
+        {
+          best[p] = dist;
+          prec[p] = top.second;
+          Q.push(make_pair(-dist, p));
+        }
+      }
+    }
+    */
   }
 
   if (prec.find(e) == prec.end()) {

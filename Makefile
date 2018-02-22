@@ -1,5 +1,6 @@
 all:
 	g++ -O2 -fopenmp -lpthread solution.cpp -o solution
+	g++ -O2 -fopenmp -lpthread solution_2d.cpp -o solution_2d
 
 test: all
 	time ./solution < input_1.txt > output_1.txt

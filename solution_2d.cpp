@@ -122,21 +122,22 @@ int main() {
     auto l02 = get<0>(p0) < get<0>(p2) ? make_tuple(p0, p2) : make_tuple(p2, p0);
     auto l12 = get<0>(p1) < get<0>(p2) ? make_tuple(p1, p2) : make_tuple(p2, p1);
 
-    int b0, b1;
-    b0 = (minX(l01)+OFFSET)/BUCKET;
-    b1 = (maxX(l01)+OFFSET)/BUCKET;
-    for(; b0 <= b1; ++b0)
-      bucketLine[b0].push_back(l01);
+    int x0, x1;
+    x0 = (minX(l01)+OFFSET)/BUCKET;
+    x1 = (maxX(l01)+OFFSET)/BUCKET;
+    for(; x0 <= x1; ++x0)
+      bucketLine[x0].push_back(l01);
 
-    b0 = (minX(l02)+OFFSET)/BUCKET;
-    b1 = (maxX(l02)+OFFSET)/BUCKET;
-    for(; b0 <= b1; ++b0)
-      bucketLine[b0].push_back(l02);
+    x0 = (minX(l02)+OFFSET)/BUCKET;
+    x1 = (maxX(l02)+OFFSET)/BUCKET;
+    for(; x0 <= x1; ++x0)
+      bucketLine[x0].push_back(l02);
 
-    b0 = (minX(l12)+OFFSET)/BUCKET;
-    b1 = (maxX(l12)+OFFSET)/BUCKET;
-    for(; b0 <= b1; ++b0)
-      bucketLine[b0].push_back(l12);
+    x0 = (minX(l12)+OFFSET)/BUCKET;
+    x1 = (maxX(l12)+OFFSET)/BUCKET;
+    for(; x0 <= x1; ++x0)
+      bucketLine[x0].push_back(l12);
+
 
     auto p00 = make_tuple(get<0>(p0) + 1, get<1>(p0));
     auto p01 = make_tuple(get<0>(p0), get<1>(p0) + 1);
@@ -305,11 +306,12 @@ int main() {
       if( get<0>(top.second) > get<0>(p) )
         pp = make_tuple(p, top.second);
 
-      int b0 = (minX(pp)+OFFSET)/BUCKET;
-      int b1 = (maxX(pp)+OFFSET)/BUCKET;
+      int x0 = (minX(pp)+OFFSET)/BUCKET;
+      int x1 = (maxX(pp)+OFFSET)/BUCKET;
 
-      for(b0; b0 <= b1; b0++) {
-        for(auto l : bucketLine[b0])
+      for(x0; x0 <= x1; x0++) 
+      {
+        for(auto l : bucketLine[x0])
           if( intersect(top.second, p, get<0>(l), get<1>(l)) )
           {
             inter = true;
@@ -317,7 +319,7 @@ int main() {
           }
         if(inter) break;
       }
-      if( inter ) continue;
+      if(inter) continue;
 
       double dist = best[top.second] + distance(top.second, p);
       if (best.find(p) == best.end() || dist < best[p]) {
