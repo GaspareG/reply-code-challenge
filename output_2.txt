@@ -1,0 +1,5 @@
+P prima 100038
+P dopo 2359
+L dopo 30000
+SORT
+IMPOSSIBLE
