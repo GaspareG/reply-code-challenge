@@ -104,8 +104,8 @@ int main() {
         make_tuple(make_tuple(x1, x2), make_tuple(x3, x4), make_tuple(x5, x6)));
   }
 
-  //L.reserve(3 * N);
-  //P.reserve(N * 12 + 2);
+  L.reserve(3 * N);
+  P.reserve(N * 24 + 2);
 
   P.push_back(s);
   P.push_back(e);
@@ -175,8 +175,7 @@ int main() {
     if( !PointInTriangle(p22, p0, p1, p2) ) P.push_back(p22);
     if( !PointInTriangle(p23, p0, p1, p2) ) P.push_back(p23);
 
-    
-    /*auto dp00 = make_tuple(get<0>(p0) + 1, get<1>(p0) + 1);
+    auto dp00 = make_tuple(get<0>(p0) + 1, get<1>(p0) + 1);
     auto dp01 = make_tuple(get<0>(p0) + 1, get<1>(p0) - 1);
     auto dp02 = make_tuple(get<0>(p0) - 1, get<1>(p0) + 1);
     auto dp03 = make_tuple(get<0>(p0) - 1, get<1>(p0) - 1);
@@ -204,7 +203,7 @@ int main() {
     if( !PointInTriangle(dp20, p0, p1, p2) ) P.push_back(dp20);
     if( !PointInTriangle(dp21, p0, p1, p2) ) P.push_back(dp21);
     if( !PointInTriangle(dp22, p0, p1, p2) ) P.push_back(dp22);
-    if( !PointInTriangle(dp23, p0, p1, p2) ) P.push_back(dp23);*/
+    if( !PointInTriangle(dp23, p0, p1, p2) ) P.push_back(dp23);
     
   }
 
@@ -229,9 +228,9 @@ int main() {
     }
   }
   P = tmp;
-  // printf("P dopo %zu\n", P.size());
-  // printf("L dopo %zu\n", L.size());
-  // fflush(stdout);
+  printf("P dopo %zu\n", P.size());
+  printf("L dopo %zu\n", L.size());
+  fflush(stdout);
 
   auto linecp = [](line a, line b){ return get<0>(get<0>(a)) < get<0>(get<0>(b)); };
 
@@ -289,8 +288,8 @@ int main() {
     if (S.find(top.second) == S.end()) continue;
     S.erase(top.second);
 
-    // printf("[%d][%d][%.6f][%ld]\n", get<0>(top.second), get<1>(top.second), top.first, count++);
-    // fflush(stdout);
+    printf("[%d][%d][%.6f][%ld]\n", get<0>(top.second), get<1>(top.second), top.first, count++);
+    fflush(stdout);
 
     if (top.second == e) break;  // END
 
