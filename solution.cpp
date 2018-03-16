@@ -168,7 +168,7 @@ int main() {
 
   printf("P prima %d\n", P.size());
   vector<point> tmp;
-#pragma omp parallel for schedule(guided)
+  #pragma omp parallel for schedule(guided)
   for (int i = 0; i < P.size(); ++i) {
     auto p = P[i];
     bool out = true;
@@ -178,7 +178,7 @@ int main() {
         break;
       }
     }
-#pragma omp critical
+    #pragma omp critical
     {
       if (out) tmp.push_back(p);
     }
@@ -212,7 +212,7 @@ int main() {
 
     if (top.second == e) break;
 
-#pragma omp parallel for schedule(guided)
+    #pragma omp parallel for schedule(guided)
     for (int i = 0; i < P.size(); ++i) {
       auto p = P[i];
 
@@ -239,7 +239,7 @@ int main() {
 
       double dist = best[top.second] + distance(top.second, p);
       if (best.find(p) == best.end() || dist < best[p]) {
-#pragma omp critical
+        #pragma omp critical
         {
           best[p] = dist;
           prec[p] = top.second;
