@@ -1,8 +1,8 @@
 # Reply Code Challenge 2018
 
-Solution for training problem of (Reply Code Challenge)[https://challenges.reply.com]
+Solution for training problem of [Reply Code Challenge](https://challenges.reply.com)
 
-## Point
+## Points
 - Input 1: **227**
 - Input 2: **0** (Impossible)
 - Input 3: **165**
